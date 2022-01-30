@@ -16,8 +16,18 @@ const formatInput = input => {
     return input.slice(0, 1).toUpperCase() + input.slice(1).toLowerCase();
 }
 
+const detectRoundWinner = input => {
+    let firstLetter = input.slice(0, 1);
+    if (firstLetter === "W") {
+        return "Player";
+    }
+    else if (firstLetter === "L") {
+        return "Computer";
+    }
+    else return "none";
+}
+
 const playRound = (playerSelection, computerSelection) => {
-    // console.log(`${playerSelection}, ${computerSelection}`);
     if (playerSelection === "Rock") {
         switch(computerSelection) {
             case "Rock" : return "Tie! Double rock!";
@@ -41,7 +51,32 @@ const playRound = (playerSelection, computerSelection) => {
     }
 }
 
-console.log(playRound(computerPlay(), computerPlay()));
+// Returns true if the winner is the player
+const detectGameWinner = (playerScore, computerScore) => {
+    if (playerScore === computerScore) return "Tie";
+    return (playerScore > computerScore ? "Player" : "Computer");
+}
+
+function game() {
+    let playerScore = 0;
+    let computerScore = 0;
+    let userInput;
+    let roundResult;
+
+    for (let i = 0; i < 5; i ++) {
+        userInput = formatInput(prompt("Type your move (Rock, Paper, Scissors)"));
+        roundResult = detectRoundWinner(playRound(userInput, computerPlay()));
+
+        if (roundResult === "Player") playerScore++;
+        
+        else if (roundResult === "Computer") computerScore++;
+    }
+    let gameWinner = detectGameWinner(playerScore, computerScore);
+
+    return `Final score: ${playerScore} - ${computerScore}. ${gameWinner} wins!`;
+}
+
+console.log(game());
 
 // let num1 = computerPlay();
 // console.log(num1);
